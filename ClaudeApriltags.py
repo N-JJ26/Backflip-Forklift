@@ -1,24 +1,3 @@
-#!/usr/bin/env python3
-"""
-Detect AprilTags from an ESP32-CAM (or any ESP camera) MJPEG stream.
-
-Setup (Python 3.12):
-    pip install opencv-python pupil-apriltags numpy
-
-ESP32-CAM firmware:
-    Flash the stock "CameraWebServer" example (Arduino IDE -> Examples -> ESP32
-    -> Camera). The video stream is served at  http://<esp-ip>:81/stream
-    and single JPEG frames at  http://<esp-ip>/capture
-
-Usage:
-    python apriltag_esp_cam.py --url http://192.168.1.50:81/stream
-    python apriltag_esp_cam.py --url http://192.168.1.50/capture --snapshot
-    python apriltag_esp_cam.py --url http://192.168.1.50:81/stream --tag-size 0.05 \
-        --fx 600 --fy 600 --cx 320 --cy 240      # enable 3D pose output
-
-Press 'q' in the preview window to quit.
-"""
-
 from __future__ import annotations
 
 import argparse
