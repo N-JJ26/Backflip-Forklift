@@ -1,0 +1,19 @@
+# Python virtual environments
+.venv/
+venv/
+bin/
+lib/
+include/
+share/
+pyvenv.cfg
+__pycache__/
+*.pyc
+
+# Model weights (download separately)
+*.pt
+
+# OS / editor
+.DS_Store
+
+# Local notes
+NOTES.md
