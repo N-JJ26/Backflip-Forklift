@@ -18,6 +18,8 @@ class Camera:
     snapshot: bool = False
     _cap: cv2.VideoCapture | None = None
 
+    FOCAL_LENGTH = 3.6 #mm
+
     def open(self) -> None:
         if not self.snapshot:
             self._cap = cv2.VideoCapture(self.url)
@@ -60,6 +62,9 @@ def draw_detection(frame: np.ndarray, det) -> None:
         2,
     )
 
+def getDistance(frame: np.ndarray, det):
+    topBorderLength = np.sqrt((det.corners[0][0] - det.corners[1][0])**2 + (det.corners[0][1] - det.corners[1][1])**2)
+    
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="AprilTag detection from an ESP camera")
@@ -136,8 +141,11 @@ def main() -> None:
             )
 
             for det in detections:
-                distance = np.sqrt((det.corners[0][0] - det.center[0])**2 + (det.corners[0][1] - det.center[1])**2)
-                msg = f"Tag {det.tag_id}: center=({det.center[0]:.1f}, {det.center[1]:.1f}) left corner=({det.corners[0][0]}, {det.corners[0][1]})"
+                if det.pose_t is not None:
+                    distance = float(np.linalg.norm(det.pose_t))
+                    print(f"Tag {det.tag_id} distance: {distance:.3f} m")
+                borderLength = np.sqrt((det.corners[0][0] - det.corners[1][0])**2 + (det.corners[0][1] - det.corners[1][1])**2)
+                msg = f"Tag {det.tag_id}: center=({det.center[0]:.1f}, {det.center[1]:.1f}) top border length=({borderLength})"
                 if det.pose_t is not None:
                     x, y, z = det.pose_t.flatten()
                     msg += f" pos(m)=({x:.3f}, {y:.3f}, {z:.3f})"
